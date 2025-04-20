@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirecting to Post...</title>
+</head>
+<body>
+<p>If you are not automatically redirected, <a id="appLink" href="#">click here</a>.</p>
+<script>
+    const pathSegments = window.location.pathname.split('/');
+    const postId = pathSegments[pathSegments.length - 1]; // Get the last segment
+
+    if (postId) {
+        const appUrl = `laharisahitya://post/${postId}`;
+        window.location.replace(appUrl); // Use replace to prevent going back
+        document.getElementById('appLink').href = appUrl; // Update the fallback link
+    } else {
+        document.getElementById('appLink').textContent = 'Link error';
+        document.getElementById('appLink').href = '#error';
+    }
+</script>
+</body>
+</html>
