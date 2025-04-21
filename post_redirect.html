@@ -12,14 +12,22 @@
     }
 
     const postId = getQueryParam('postId');
+    const appLink = document.getElementById('appLink');
 
     if (postId) {
-        const appUrl = `laharisahitya://posts/${postId}`;
-        window.location.replace(appUrl);
-        document.getElementById('appLink').href = appUrl;
+        const appUrl = `laharisahitya://post/${postId}`;
+        window.location.replace(appUrl); // Attempt automatic redirect
+        appLink.href = appUrl; // Set the href for the manual link
+
+        // Try setting window.location.href on the link click as well
+        appLink.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default link behavior
+            window.location.href = appUrl;
+        });
+
     } else {
-        document.getElementById('appLink').textContent = 'Link error: Post ID missing';
-        document.getElementById('appLink').href = '#error';
+        appLink.textContent = 'Link error: Post ID missing';
+        appLink.href = '#error';
     }
 </script>
 </body>
