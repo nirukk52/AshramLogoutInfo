@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Redirecting to Post...</title>
-</head>
+<head><title>Redirecting to Post...</title></head>
 <body>
 <p>If you are not automatically redirected, <a id="appLink" href="#">click here</a>.</p>
 <script>
@@ -12,22 +10,15 @@
     }
 
     const postId = getQueryParam('postId');
+    const postType = getQueryParam('type');
     const appLink = document.getElementById('appLink');
 
-    if (postId) {
-        const appUrl = `laharisahitya://post/${postId}`;
-        window.location.replace(appUrl); // Attempt automatic redirect
-        appLink.href = appUrl; // Set the href for the manual link
-
-        // Try setting window.location.href on the link click as well
-        appLink.addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent the default link behavior
-            window.location.href = appUrl;
-        });
-
+    if (postId && postType) {
+        const appUrl = `laharisahitya://post/${postId}?type=${postType}`;
+        appLink.href = appUrl;
+        setTimeout(() => appLink.click(), 500);
     } else {
-        appLink.textContent = 'Link error: Post ID missing';
-        appLink.href = '#error';
+        appLink.textContent = 'Invalid or missing parameters';
     }
 </script>
 </body>
