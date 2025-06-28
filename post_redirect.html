@@ -1,24 +1,130 @@
 <!DOCTYPE html>
-<html>
-<head><title>Redirecting to Post...</title></head>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>।। श्री लहरी नाथाय नमः ।।</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+          margin: 0;
+          padding: 0;
+          font-family: 'Noto Sans Devanagari', sans-serif;
+          background: linear-gradient(to bottom right, #fff3e0, #ffe0b2);
+          color: #3e2723;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100vh;
+          text-align: center;
+        }
+
+        h1 {
+          font-size: 2rem;
+          margin-bottom: 0.2rem;
+        }
+
+        h2 {
+          font-size: 1.2rem;
+          margin-bottom: 2rem;
+        }
+
+        #loading, #fallback {
+          display: none;
+        }
+
+        .dot {
+          font-weight: bold;
+          animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+          0%, 100% { opacity: 0.2; }
+          50% { opacity: 1; }
+        }
+
+        .button {
+          background-color: #ff5722;
+          color: white;
+          padding: 12px 24px;
+          border: none;
+          border-radius: 8px;
+          font-size: 1rem;
+          cursor: pointer;
+          margin-top: 20px;
+        }
+
+        .countdown {
+          font-size: 1.4rem;
+          font-weight: bold;
+          margin-top: 1rem;
+        }
+
+    </style>
+</head>
 <body>
-<p>If you are not automatically redirected, <a id="appLink" href="#">click here</a>.</p>
+
+<h1>।। श्री लहरी नाथाय नमः ।।</h1>
+<h2>जय लहरी जय मानव</h2>
+
+<div id="loading">
+    <p>ऐप खोलने का प्रयास किया जा रहा है...</p>
+    <div class="countdown">
+        <span id="count">5</span> <span class="dot">●</span>
+    </div>
+</div>
+
+<div id="fallback">
+    <p>ऐप नहीं मिला। अब आपको Play Store पर ले जाया जा रहा है।</p>
+    <p>कृपया ऐप डाउनलोड करें और इस लिंक को पुनः खोलें। धन्यवाद।</p>
+    <button class="button" onclick="window.location.href='https://play.google.com/store/apps/details?id=com.niranjan.android.laharisahitya'">
+        प्ले स्टोर खोलें
+    </button>
+</div>
+
 <script>
     function getQueryParam(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(name);
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
     }
 
     const postId = getQueryParam('postId');
     const postType = getQueryParam('type');
-    const appLink = document.getElementById('appLink');
+    const fallbackUrl = 'https://play.google.com/store/apps/details?id=com.niranjan.android.laharisahitya';
 
     if (postId && postType) {
-        const appUrl = `laharisahitya://post/${postId}?type=${postType}`;
-        appLink.href = appUrl;
-        setTimeout(() => appLink.click(), 500);
+      const appUrl = `laharisahitya://post/${postId}?type=${postType}`;
+      const now = Date.now();
+      window.location.href = appUrl;
+
+      document.getElementById('loading').style.display = 'block';
+
+      let countdown = 5;
+      const countSpan = document.getElementById('count');
+
+      const interval = setInterval(() => {
+        countdown--;
+        if (countdown > 0) {
+          countSpan.textContent = countdown;
+        } else {
+          clearInterval(interval);
+          const elapsed = Date.now() - now;
+          if (elapsed < 2000) {
+            // App likely not installed
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('fallback').style.display = 'block';
+          }
+          window.location.href = fallbackUrl;
+        }
+      }, 1000);
+
     } else {
-        appLink.textContent = 'Invalid or missing parameters';
+      // Handle invalid/missing params
+      document.body.innerHTML = `
+        <h2>❌ गलत या अधूरी लिंक</h2>
+        <p>ऐप इंस्टॉल करने के लिए कृपया नीचे क्लिक करें:</p>
+        <button class="button" onclick="window.location.href='${fallbackUrl}'">प्ले स्टोर खोलें</button>
+      `;
     }
 </script>
 </body>
